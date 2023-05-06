@@ -31,7 +31,7 @@ if (connectionOptions.ssl) {
 // create connection with database
 // note that its not active database connection
 // TypeORM creates you connection pull to uses connections from pull on your requests
-createConnection(connectionOptions).then(async () => {
+
 
     const app = new Koa();
 
@@ -46,8 +46,7 @@ createConnection(connectionOptions).then(async () => {
         }
     }));
 
-    // Enable cors with default options
-    app.use(cors());
+    // Disable CORS for hackathon purposes app.use(cors());
 
     // Logger middleware -> use winston as logger (logging.ts with config)
     app.use(logger(winston));
@@ -60,16 +59,14 @@ createConnection(connectionOptions).then(async () => {
 
     // JWT middleware -> below this line routes are only reached if JWT token is valid, secret as env variable
     // do not protect swagger-json and swagger-html endpoints
-    app.use(jwt({ secret: config.jwtSecret }).unless({ path: [/^\/swagger-/] }));
+    // Disable JWT for hackathon purposes app.use(jwt({ secret: config.jwtSecret }).unless({ path: [/^\/swagger-/] }));
 
     // These routes are protected by the JWT middleware, also include middleware to respond with "Method Not Allowed - 405".
     app.use(protectedRouter.routes()).use(protectedRouter.allowedMethods());
 
     // Register cron job to do any action needed
-    cron.start();
+    // No need for cron jobs during hackathon cron.start();
 
     app.listen(config.port, () => {
         console.log(`Server running on port ${config.port}`);
     });
-
-}).catch((error: string) => console.log("TypeORM connection error: ", error));
