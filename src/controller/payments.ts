@@ -4,6 +4,8 @@ import {processBudPayPaymentRequest} from "../payments";
 
 export default class PaymentsController {
     public static async initializeBudPayPayment(ctx: Context): Promise<void> {
+        console.log("Reached initialize BudPay payment controller method");
+        console.log(ctx.request.body);
         const expectedSchema = Joi.object({
             amount: Joi.string().required(),
             email: Joi.string().required()
@@ -12,7 +14,10 @@ export default class PaymentsController {
         const { error, value } = expectedSchema.validate(ctx.request.body);
 
         if (error || ctx.request.body === undefined) {
-            // Bad request
+            ctx.status = 403;
+            ctx.body = {
+                result: "Unexpected or missing body for request"
+            };
         }
 
         await processBudPayPaymentRequest(value.amount, value.email);

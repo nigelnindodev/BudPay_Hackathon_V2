@@ -10,6 +10,9 @@ export interface Config {
     databaseUrl: string;
     dbEntitiesPath: string[];
     cronJobExpression: string;
+
+    budPayBaseUrl: string;
+    budPayAuthorizationHeader: string;
 }
 
 const isDevMode = process.env.NODE_ENV == "development";
@@ -23,7 +26,10 @@ const config: Config = {
     dbEntitiesPath: [
       ... isDevMode ? ["src/entity/**/*.ts"] : ["dist/entity/**/*.js"],
     ],
-    cronJobExpression: "0 * * * *"
+    cronJobExpression: "0 * * * *",
+    budPayBaseUrl: "https://api.budpay.com",
+    budPayAuthorizationHeader: " sk_live_cswltnqwc2rp7dedhblxpxmuoaz880jgqmi92dz"
+    //TODO: Should be environment variables
 };
 
 export { config };
